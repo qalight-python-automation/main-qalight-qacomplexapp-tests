@@ -202,3 +202,27 @@ class TestStartPage(BaseTest):
         error_message = driver.find_element_by_xpath("//*[contains(text(), 'You must provide a valid email address.')]")
         assert error_message.text == "You must provide a valid email address.", f"Actual: {error_message.text}"
         self.logger.info("Error message was verified")
+
+    def test_invalid_reg_login_1(self, setup):
+        """
+        - Open start page
+        - Set invalid login value
+        - Verify error message
+        """
+        driver = setup
+
+        # Open start page
+        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
+        self.logger.info("Open start page")
+
+        # Set login value
+        user_name = f"User!Nam3#"
+        username_input_field = driver.find_element(by=By.ID, value='username-register')
+        username_input_field.clear()
+        username_input_field.send_keys(user_name)
+        self.logger.info("Set login value: '%s'", user_name)
+
+        # Verify error message
+        error_message = driver.find_element_by_xpath("//*[contains(text(), 'Username can only contain letters and numbers.')]")
+        assert error_message.text == "Username can only contain letters and numbers.", f"Actual: {error_message.text}"
+        self.logger.info("Error message was verified")
