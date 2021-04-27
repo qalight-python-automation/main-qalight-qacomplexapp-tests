@@ -154,3 +154,51 @@ class TestStartPage(BaseTest):
         error_message = driver.find_element_by_xpath("//*[contains(text(), 'Username can only contain letters and numbers.')]")
         assert error_message.text == "Username can only contain letters and numbers.", f"Actual: {error_message.text}"
         self.logger.info("Error message was verified")
+
+    def test_invalid_reg_pass(self, setup):
+        """
+        - Open start page
+        - Set invalid password value
+        - Verify error message
+        """
+        driver = setup
+
+        # Open start page
+        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
+        self.logger.info("Open start page")
+
+        # Set password value
+        password = "123"
+        password_input_field = driver.find_element(by=By.ID, value='password-register')
+        password_input_field.clear()
+        password_input_field.send_keys(password)
+        self.logger.info("Set password value: '%s'", password)
+
+        # Verify error message
+        error_message = driver.find_element_by_xpath("//*[contains(text(), 'Password must be at least 12 characters.')]")
+        assert error_message.text == "Password must be at least 12 characters.", f"Actual: {error_message.text}"
+        self.logger.info("Error message was verified")
+
+    def test_invalid_reg_email(self, setup):
+        """
+        - Open start page
+        - Set invalid email value
+        - Verify error message
+        """
+        driver = setup
+
+        # Open start page
+        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
+        self.logger.info("Open start page")
+
+        # Set email value
+        email = "mail"
+        email_input_field = driver.find_element(by=By.ID, value='email-register')
+        email_input_field.clear()
+        email_input_field.send_keys(email)
+        self.logger.info("Set email value: '%s'", email)
+
+        # Verify error message
+        error_message = driver.find_element_by_xpath("//*[contains(text(), 'You must provide a valid email address.')]")
+        assert error_message.text == "You must provide a valid email address.", f"Actual: {error_message.text}"
+        self.logger.info("Error message was verified")
