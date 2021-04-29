@@ -7,6 +7,9 @@ from selenium.webdriver.common.by import By
 
 from conftest import BaseTest
 
+from constants import start_page as start_page_constants
+from pages.start_page import StartPage
+
 
 class TestStartPage(BaseTest):
     """Tests for start page"""
@@ -15,7 +18,10 @@ class TestStartPage(BaseTest):
     def setup(self):
         driver = webdriver.Chrome(executable_path='/home/wing/PycharmProjects/QAComplexApp/drivers/chromedriver')
         driver.implicitly_wait(time_to_wait=20)  # seconds
-        yield driver
+        # Open start page
+        driver.get(start_page_constants.START_PAGE_URL)
+        start_page = StartPage(driver)
+        yield start_page
         driver.close()
 
     def test_empty_fields_login(self, setup):
@@ -25,29 +31,13 @@ class TestStartPage(BaseTest):
         - Click on Sign In
         - Verify error message
         """
-        driver = setup
-
-        # Open start page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.logger.info("Open start page")
+        start_page = setup
 
         # Clear password and login fields
-        username_input_field = driver.find_element(by=By.XPATH, value='//input[@placeholder="Username"]')
-        username_input_field.clear()
-
-        password_input_field = driver.find_element(by=By.XPATH, value='//input[@placeholder="Password"]')
-        password_input_field.clear()
-        self.logger.info("Cleaned up input fields")
-
-        # Click on Sign In
-        sign_in_button = driver.find_element(by=By.XPATH, value='//button[@class="btn btn-primary btn-sm"]')
-        sign_in_button.click()
-        self.logger.info("Clicked on sign in")
+        start_page.fill_sign_in_fields(username="", password="")
 
         # Verify error message
-        error_message = driver.find_element_by_xpath("//*[@class='alert alert-danger text-center']")
-        assert error_message.text == r"Invalid username \ password", f"Actual: {error_message.text}"
-        self.logger.info("Error message was verified")
+        start_page.verify_invalid_credentials()
 
     def test_invalid_credentials(self, setup):
         """
@@ -57,32 +47,13 @@ class TestStartPage(BaseTest):
         - Click on Sign In
         - Verify error message
         """
-        driver = setup
-
-        # Open start page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.logger.info("Open start page")
+        start_page = setup
 
         # Clear password and login fields
-        username_input_field = driver.find_element(by=By.XPATH, value='//input[@placeholder="Username"]')
-        username_input_field.clear()
-        username_input_field.send_keys("Login123")
-        self.logger.info("Set login value: 'Login123'")
-
-        password_input_field = driver.find_element(by=By.XPATH, value='//input[@placeholder="Password"]')
-        password_input_field.clear()
-        password_input_field.send_keys("Pwd147")
-        self.logger.info("Set password value: 'Pwd147'")
-
-        # Click on Sign In
-        sign_in_button = driver.find_element(by=By.XPATH, value='//button[@class="btn btn-primary btn-sm"]')
-        sign_in_button.click()
-        self.logger.info("Clicked on sign in")
+        start_page.fill_sign_in_fields(username="Login123", password="Pwd147")
 
         # Verify error message
-        error_message = driver.find_element_by_xpath("//*[@class='alert alert-danger text-center']")
-        assert error_message.text == r"Invalid username \ password", f"Actual: {error_message.text}"
-        self.logger.info("Error message was verified")
+        start_page.verify_invalid_credentials()
 
     def test_registration(self, setup):
         """
@@ -91,45 +62,16 @@ class TestStartPage(BaseTest):
         - Click on sign up button
         - Verify that sign up successful
         """
-        driver = setup
+        start_page = setup
 
-        # Open start page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.logger.info("Open start page")
-
-        # Set login value
-        user_name = f"UserName{self.variety}"
-        username_input_field = driver.find_element(by=By.ID, value='username-register')
-        username_input_field.clear()
-        username_input_field.send_keys(user_name)
-        self.logger.info("Set login value: '%s'", user_name)
-
-        # Set email value
-        email = f"email{self.variety}@mail.com"
-        email_input_field = driver.find_element(by=By.ID, value='email-register')
-        email_input_field.clear()
-        email_input_field.send_keys(email)
-        self.logger.info("Set email value: '%s'", email)
-
-        # Set password value
-        password = f"UsrPwd{self.variety}"
-        password_input_field = driver.find_element(by=By.ID, value='password-register')
-        password_input_field.clear()
-        password_input_field.send_keys(password)
-        self.logger.info("Set password value: '%s'", password)
-
-        # Sleep a bit to make button ready to click
-        sleep(1)
-
-        # Click on sign up button
-        sign_in_button = driver.find_element(by=By.XPATH, value="//button[@type='submit']")
-        sign_in_button.click()
-        self.logger.info("Clicked on sign up")
+        # Set login, email and password fields with valid values
+        username = f"UserName{self.variety}"
+        start_page.sign_up_user(username=username, email=f"email{self.variety}@mail.com", password=f"UsrPwd{self.variety}")
+        self.logger.info("Sign up for user '%s'", username)
 
         # Verify that sign up successful
-        hello_message = driver.find_element_by_xpath("//h2").text
-        assert hello_message == f"Hello {user_name.lower()}, your feed is empty.", f"Actual message: {hello_message}"
-        self.logger.info("Hello message was verified")
+        start_page.verify_sign_up(username=username)
+        self.logger.info("Sign Up was verified")
 
     def test_invalid_reg_login(self, setup):
         """
@@ -137,22 +79,16 @@ class TestStartPage(BaseTest):
         - Set invalid login value
         - Verify error message
         """
-        driver = setup
-
-        # Open start page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.logger.info("Open start page")
+        start_page = setup
 
         # Set login value
-        user_name = f"User!Nam3#"
-        username_input_field = driver.find_element(by=By.ID, value='username-register')
-        username_input_field.clear()
-        username_input_field.send_keys(user_name)
+        user_name = "User!Nam3#"
+        start_page.fill_sign_up_username(user_name)
         self.logger.info("Set login value: '%s'", user_name)
 
         # Verify error message
-        error_message = driver.find_element_by_xpath("//*[contains(text(), 'Username can only contain letters and numbers.')]")
-        assert error_message.text == "Username can only contain letters and numbers.", f"Actual: {error_message.text}"
+        start_page.verify_error_message_text(error_xpath=start_page_constants.SIGN_UP_INVALID_LOGIN_ERROR_XPATH,
+                                             error_text=start_page_constants.SIGN_UP_INVALID_LOGIN_ERROR_TEXT)
         self.logger.info("Error message was verified")
 
     def test_invalid_reg_pass(self, setup):
@@ -161,22 +97,16 @@ class TestStartPage(BaseTest):
         - Set invalid password value
         - Verify error message
         """
-        driver = setup
-
-        # Open start page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.logger.info("Open start page")
+        start_page = setup
 
         # Set password value
         password = "123"
-        password_input_field = driver.find_element(by=By.ID, value='password-register')
-        password_input_field.clear()
-        password_input_field.send_keys(password)
+        start_page.fill_sign_up_password(password)
         self.logger.info("Set password value: '%s'", password)
 
         # Verify error message
-        error_message = driver.find_element_by_xpath("//*[contains(text(), 'Password must be at least 12 characters.')]")
-        assert error_message.text == "Password must be at least 12 characters.", f"Actual: {error_message.text}"
+        start_page.verify_error_message_text(error_text=start_page_constants.SIGN_UP_PASSWORD_TOO_SHORT_ERROR_TEXT,
+                                             error_xpath=start_page_constants.SIGN_UP_PASSWORD_TOO_SHORT_ERROR_XPATH)
         self.logger.info("Error message was verified")
 
     def test_invalid_reg_email(self, setup):
@@ -185,20 +115,14 @@ class TestStartPage(BaseTest):
         - Set invalid email value
         - Verify error message
         """
-        driver = setup
-
-        # Open start page
-        driver.get('https://qa-complex-app-for-testing.herokuapp.com/')
-        self.logger.info("Open start page")
+        start_page = setup
 
         # Set email value
         email = "mail"
-        email_input_field = driver.find_element(by=By.ID, value='email-register')
-        email_input_field.clear()
-        email_input_field.send_keys(email)
+        start_page.fill_sign_up_email(email)
         self.logger.info("Set email value: '%s'", email)
 
         # Verify error message
-        error_message = driver.find_element_by_xpath("//*[contains(text(), 'You must provide a valid email address.')]")
-        assert error_message.text == "You must provide a valid email address.", f"Actual: {error_message.text}"
+        start_page.verify_error_message_text(error_xpath=start_page_constants.SIGN_UP_INVALID_EMAIL_ERROR_XPATH,
+                                             error_text=start_page_constants.SIGN_UP_INVALID_EMAIL_ERROR_TEXT)
         self.logger.info("Error message was verified")
