@@ -71,7 +71,7 @@ class TestStartPage(BaseTest):
 
         # Verify that sign up successful
         start_page.verify_sign_up(username=username)
-        self.logger.info("Sign Up was verified")
+        self.logger.info("Sign Up was verified based on Hello message")
 
     def test_invalid_reg_login(self, setup):
         """
