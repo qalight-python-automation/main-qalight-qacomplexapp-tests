@@ -1,10 +1,7 @@
 """Store Start Page tests"""
-from time import sleep
 
 import pytest
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-
 from conftest import BaseTest
 
 from constants import start_page as start_page_constants
@@ -17,7 +14,6 @@ class TestStartPage(BaseTest):
     @pytest.fixture(scope="function")
     def setup(self):
         driver = webdriver.Chrome(executable_path='/home/wing/PycharmProjects/QAComplexApp/drivers/chromedriver')
-        driver.implicitly_wait(time_to_wait=20)  # seconds
         # Open start page
         driver.get(start_page_constants.START_PAGE_URL)
         start_page = StartPage(driver)
@@ -67,10 +63,10 @@ class TestStartPage(BaseTest):
         # Set login, email and password fields with valid values
         username = f"UserName{self.variety}"
         start_page.sign_up_user(username=username, email=f"email{self.variety}@mail.com", password=f"UsrPwd{self.variety}")
-        self.logger.info("Sign up for user '%s'", username)
+        self.logger.info("Filled all required fields for user '%s'", username)
 
         # Verify that sign up successful
-        start_page.verify_sign_up(username=username)
+        start_page.click_sign_up_and_verify(username=username)
         self.logger.info("Sign Up was verified based on Hello message")
 
     def test_invalid_reg_login(self, setup):
