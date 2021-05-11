@@ -1,6 +1,5 @@
 """Encapsulate actions related to start page"""
 import logging
-from time import sleep
 
 from selenium.webdriver.common.by import By
 
@@ -18,10 +17,10 @@ class StartPage(BasePage):
     def fill_sign_in_fields(self, username, password):
         """Fill specified fields using passed values"""
         self.wait_until_send_keys(locator_type=By.XPATH, locator=start_page.SIGN_IN_LOGIN_FIELD_XPATH, data=username)
-        self.logger.info("Set login value: '%s'", username)
+        self.logger.debug("Set login value: '%s'", username)
 
         self.wait_until_send_keys(locator_type=By.XPATH, locator=start_page.SIGN_IN_PASSWORD_FIELD_XPATH, data=password)
-        self.logger.info("Set password value: '%s'", password)
+        self.logger.debug("Set password value: '%s'", password)
 
         # Click on Sign In
         self.wait_until_click(locator_type=By.XPATH, locator=start_page.SIGN_IN_BUTTON_XPATH)
