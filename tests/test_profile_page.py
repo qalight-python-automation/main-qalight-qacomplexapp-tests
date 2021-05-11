@@ -12,22 +12,23 @@ from pages.profile_page import ProfilePage
 class TestProfilePage(BaseTest):
     """Store Profile Page tests"""
 
-    # def test_profile_page(self, start_page, register_user):
-    #     """
-    #     - Login as registred user
-    #     - Go to profile page
-    #     - Verify Post, Followers and Following number
-    #     - Verify name in profile
-    #     """
-    #     # Login
-    #     start_page.fill_sign_in_fields(register_user.username, register_user.password)
-    #
-    #     # Go to profile page
-    #     profile_page = start_page.go_to_profile(register_user.username)
-    #
-    #     # Verify Post, Followers and Following number
-    #     profile_page.verify_tab_info(username=register_user.username)
-    #     self.logger.info("Verified Tabs information")
+    def test_profile_page(self, start_page, register_user):
+        """
+        - Login as registred user
+        - Go to profile page
+        - Verify Post, Followers and Following number
+        - Verify name in profile
+        """
+        # Login
+        start_page.fill_sign_in_fields(register_user.username, register_user.password)
+
+        # Go to profile page
+        sleep(1)
+        profile_page = start_page.go_to_profile(register_user.username)
+
+        # Verify Post, Followers and Following number
+        profile_page.verify_tab_info(username=register_user.username)
+        self.logger.info("Verified Tabs information")
 
     def test_create_post(self, start_page, register_user):
         """
