@@ -57,3 +57,11 @@ class BasePage:
         """Wait until button clickable and click"""
         self.wait.until(EC.element_to_be_clickable((locator_type, locator)))
         self.driver.find_element(by=locator_type, value=locator).click()
+
+
+class User:
+
+    def __init__(self, username="", password="", email=""):
+        self.username = username
+        self.password = password
+        self.email = email

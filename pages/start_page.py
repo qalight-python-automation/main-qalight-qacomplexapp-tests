@@ -5,6 +5,8 @@ from selenium.webdriver.common.by import By
 
 from constants import start_page
 from pages.base import BasePage, wait_until_ok
+from pages.header import Header
+from pages.profile_page import ProfilePage
 
 
 class StartPage(BasePage):
@@ -13,6 +15,7 @@ class StartPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
         self.logger = logging.getLogger(__name__)
+        self.header = Header(driver)
 
     def fill_sign_in_fields(self, username, password):
         """Fill specified fields using passed values"""
@@ -82,3 +85,8 @@ class StartPage(BasePage):
         message = self.wait_until_find(locator_type=By.XPATH, locator=error_xpath).text
         assert message == error_text, f"Actual message: {message}"
         self.logger.debug("Error message was verified")
+
+    def go_to_profile(self, username):
+        """Click on profile"""
+        self.header.go_to_profile_page(username)
+        return ProfilePage(self.driver)

@@ -1,25 +1,11 @@
 """Store Start Page tests"""
-import json
-
-import pytest
-from selenium import webdriver
 from conftest import BaseTest
 
 from constants import start_page as start_page_constants
-from pages.start_page import StartPage
 
 
 class TestStartPage(BaseTest):
     """Tests for start page"""
-
-    @pytest.fixture(scope="function")
-    def start_page(self):
-        driver = webdriver.Chrome(executable_path='/home/wing/PycharmProjects/QAComplexApp/drivers/chromedriver')
-        # Open start page
-        driver.get(start_page_constants.START_PAGE_URL)
-        start_page = StartPage(driver)
-        yield start_page
-        driver.close()
 
     def test_empty_fields_login(self, start_page):
         """
