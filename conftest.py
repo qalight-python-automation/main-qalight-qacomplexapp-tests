@@ -42,7 +42,10 @@ def start_page():
 @pytest.fixture(scope="function")
 def register_user(start_page):
     variety = str(random.randint(10000000, 99999999))
-    user = User(username=f"UserName{variety}", email=f"email{variety}@mail.com", password=f"UsrPwd{variety}")
+    user = User()
+    user.username = f"UserName{variety}"
+    user.email = f"email{variety}@mail.com"
+    user.password = f"UsrPwd{variety}"
     start_page.sign_up_user(username=user.username, email=user.email, password=user.password)
     start_page.click_sign_up_and_verify(username=user.username)
     start_page.header.sign_out()

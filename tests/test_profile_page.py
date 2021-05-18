@@ -4,9 +4,8 @@ from time import sleep
 from selenium.webdriver.common.by import By
 
 from conftest import BaseTest
-from constants.base import PROFILE_PAGE_LINK
 from constants.create_post import TITLE_XPATH, POST_BODY_XPATH, SAVE_POST_BUTTON, SUCCESS_MESSAGE_TEXT, SUCCESS_MESSAGE_XPATH
-from pages.profile_page import ProfilePage
+from pages.base import generate_random_text
 
 
 class TestProfilePage(BaseTest):
@@ -61,3 +60,38 @@ class TestProfilePage(BaseTest):
         # Verify Post, Followers and Following number
         profile_page.verify_tab_info(username=register_user.username, posts_number=1)
         self.logger.info("Verified Tabs information")
+
+    def test_chat_message(self, start_page, register_user):
+        """
+        - Login as user
+        - Open chat
+        - Send some message
+        - Verify message text
+        - Send one more message
+        - Verify 1st and 2nd messages
+        """
+        # Login
+        start_page.fill_sign_in_fields(register_user.username, register_user.password)
+        self.logger.info("Logged in as %s", register_user.username)
+
+        # Open chat
+        chat = start_page.header.open_chat()
+        self.logger.info("Chat was opened")
+
+        # Send some message
+        message1 = generate_random_text(7)
+        chat.send_message(message1)
+        self.logger.info("Sent message: %s", message1)
+
+        # Verify message text
+        chat.verify_messages([message1])
+        self.logger.info("Message text was verified")
+
+        # Send one more message
+        message2 = generate_random_text(12)
+        chat.send_message(message2)
+        self.logger.info("Sent message: %s", message2)
+
+        # Verify messages text
+        chat.verify_messages([message1, message2])
+        self.logger.info("Messages text was verified")
