@@ -4,6 +4,7 @@ from time import sleep
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from constants import start_page as start_page_constants

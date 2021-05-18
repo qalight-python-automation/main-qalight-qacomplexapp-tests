@@ -6,3 +6,6 @@ SAVE_POST_BUTTON = "//button[@class='btn btn-primary']"
 
 SUCCESS_MESSAGE_TEXT = "New post successfully created."
 SUCCESS_MESSAGE_XPATH = f"//*[contains(text(), '{SUCCESS_MESSAGE_TEXT}')]"
+
+EMPTY_FIELDS_ERRORS = {"en": "Please fill out this field.",
+                       "ru": "Заполните это поле."}
