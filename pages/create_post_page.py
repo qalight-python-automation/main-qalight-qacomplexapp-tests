@@ -17,5 +17,5 @@ class CreatePostPage(BasePage):
     def verify_empty_filed_message(self, locator_type, locator):
         """Verify error message as attribute of the field"""
         field = self.driver.find_element(by=locator_type, value=locator)
-        assert field.get_attribute("validationMessage") == create_post_constants.EMPTY_FIELDS_ERRORS[self.driver.language], \
-            f"Actual: {field.get_attribute('validationMessage')}, Expected: {create_post_constants.EMPTY_FIELDS_ERRORS[self.driver.language]}"
+        assert field.get_attribute("validationMessage") == create_post_constants.EMPTY_FIELDS_ERROR, \
+            f"Actual: {field.get_attribute('validationMessage')}, Expected: {create_post_constants.EMPTY_FIELDS_ERROR}"

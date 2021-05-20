@@ -143,8 +143,3 @@ class TestProfilePage(BaseTest):
         # Verify errors
         create_post.verify_empty_filed_message(locator_type=By.XPATH, locator=create_post_constants.POST_BODY_XPATH)
         self.logger.info("Error message was verified")
-
-    def test_screenshot(self, start_page):
-        """"""
-        start_page.verify_element_image(locator_type=By.XPATH, locator=start_page_constants.SIGN_IN_PASSWORD_FIELD_XPATH,
-                                        expected_image_path="/home/wing/PycharmProjects/QAComplexApp/resources/images/username_login_fields_image.png")
