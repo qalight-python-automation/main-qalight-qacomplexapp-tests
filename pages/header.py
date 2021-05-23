@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from pages.base import BasePage
 from constants import header as header_constants
 from pages.chat import Chat
+from pages.create_post_page import CreatePostPage
 
 
 class Header(BasePage):
@@ -28,6 +29,7 @@ class Header(BasePage):
     def create_post(self):
         """Click on Create Post"""
         self.wait_until_click(locator_type=By.XPATH, locator=header_constants.CREATE_POST_BUTTON_XPATH)
+        return CreatePostPage(self.driver)
 
     def open_chat(self):
         """Click on Create Post"""
