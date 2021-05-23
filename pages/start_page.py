@@ -1,12 +1,17 @@
 """Encapsulate actions related to start page"""
+import datetime
 import logging
+from time import sleep
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from constants import start_page
-from pages.base import BasePage, wait_until_ok
+from constants.create_post import TITLE_XPATH, POST_BODY_XPATH, SAVE_POST_BUTTON
+from pages.base import BasePage
 from pages.header import Header
 from pages.profile_page import ProfilePage
+from helpers.base import wait_until_ok
 
 
 class StartPage(BasePage):
@@ -90,3 +95,38 @@ class StartPage(BasePage):
         """Click on profile"""
         self.header.go_to_profile_page(username)
         return ProfilePage(self.driver)
+
+    def check_user_exists(self, username, password):
+        """Try to login as user and return True if success otherwise False"""
+        self.fill_sign_in_fields(username, password)
+        try:
+            self.verify_invalid_credentials()
+        except (AssertionError, TimeoutException):
+            self.header.sign_out()
+            return True
+        else:
+            return False
+
+    def register_user(self, user):
+        """Register user"""
+        self.sign_up_user(username=user.username, email=user.email, password=user.password)
+        self.click_sign_up_and_verify(username=user.username)
+
+    def register_user_and_create_post(self, user):
+        """Register user and create post"""
+        # Register user
+        self.register_user(user)
+
+        # Click "create post"
+        sleep(1)
+        self.header.create_post()
+
+        # Fill all required fields
+        sleep(1)
+        self.wait_until_send_keys(locator_type=By.XPATH, locator=TITLE_XPATH, data=user.username)
+        self.wait_until_send_keys(locator_type=By.XPATH, locator=POST_BODY_XPATH, data=str(datetime.datetime.now().timestamp()))
+        self.wait_until_click(locator_type=By.XPATH, locator=SAVE_POST_BUTTON)
+
+        # Sign out
+        sleep(1)
+        self.header.sign_out()

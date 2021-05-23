@@ -1,11 +1,27 @@
 """Store Start Page tests"""
+import pytest
+
 from conftest import BaseTest
 
 from constants import start_page as start_page_constants
+from constants.base import FIREFOX, CHROME
+from helpers.base import create_driver
+from pages.start_page import StartPage
 
 
+@pytest.mark.parametrize("browser_name", [FIREFOX, CHROME])
 class TestStartPage(BaseTest):
     """Tests for start page"""
+
+    @pytest.fixture(scope="function")
+    def start_page(self, browser_name):
+        driver = create_driver(browser_name)
+        driver.implicitly_wait(5)
+        # Open start page
+        driver.get(start_page_constants.START_PAGE_URL)
+        start_page = StartPage(driver)
+        yield start_page
+        driver.close()
 
     def test_empty_fields_login(self, start_page):
         """
