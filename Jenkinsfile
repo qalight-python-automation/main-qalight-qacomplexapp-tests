@@ -19,11 +19,12 @@ pipeline {
           sh '''#!/usr/bin/env bash
             # Write safe shell scripts
             set -euf -o pipefail
+            # Show all environment variables
             export
             # Install requirements
             pip install -r requirements.txt
             # Run tests
-            python3 -m pytest -n 5
+            python3 -m pytest -n 3
             # EOF
           '''
         } // script
