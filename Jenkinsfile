@@ -19,6 +19,8 @@ pipeline {
           sh '''#!/usr/bin/env bash
             # Write safe shell scripts
             set -euf -o pipefail
+            # Install requirements
+            pip install -r requirements.txt
             # Run tests
             pytest -n 5
             # EOF
