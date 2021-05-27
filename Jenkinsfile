@@ -23,7 +23,7 @@ pipeline {
             # Install requirements
             python -m pip install -r requirements.txt
             # Run tests
-            pytest -n 5
+            python -m pytest -n 5
             # EOF
           '''
         } // script
