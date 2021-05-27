@@ -21,9 +21,9 @@ pipeline {
             set -euf -o pipefail
             export
             # Install requirements
-            python -m pip install -r requirements.txt
+            pip install -r requirements.txt
             # Run tests
-            python -m pytest -n 5
+            python3 -m pytest -n 5
             # EOF
           '''
         } // script
