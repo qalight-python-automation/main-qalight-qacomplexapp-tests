@@ -15,7 +15,7 @@ pipeline {
     stage('\u2776 Test') {
       steps {
         script {
-          currentBuild.displayName = "#${env.BUILD_NUMBER} (${env.GIT_COMMIT.take(8)}) ${env.SERVICE_VERSION}"
+          currentBuild.displayName = "#${env.BUILD_NUMBER} (${env.GIT_COMMIT.take(8)}) ${env.BRANCH_NAME}"
           sh '''#!/usr/bin/env bash
             # Write safe shell scripts
             set -euf -o pipefail

@@ -1,0 +1,10 @@
+---
+request:
+  method: PUT
+  path: "/user"
+response:
+  statusCode: 400
+  headers:
+    Content-Type:
+      - application/json
+  body: '{"The user cannot be updated!"}'
