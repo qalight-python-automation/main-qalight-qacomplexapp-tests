@@ -37,7 +37,7 @@ class StartPage(BasePage):
     def verify_invalid_credentials(self):
         """Check error message on invalid credentials"""
         error_message = self.wait_until_find(locator_type=By.XPATH, locator=start_page.INVALID_LOGIN_ERROR_XPATH)
-        assert error_message.text == r"Error", f"Actual: {error_message.text}"
+        assert error_message.text == r"Invalid username pasword", f"Actual: {error_message.text}"
         self.logger.debug("Error message was verified")
 
     def fill_sign_up_username(self, username):
