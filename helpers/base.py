@@ -91,7 +91,9 @@ def wait_until_ok(timeout, period=0.25):
 def create_driver(browser_name):
     """Create driver based on input driver name"""
     if browser_name == CHROME:
-        return webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        return webdriver.Chrome(options=options)
     elif browser_name == FIREFOX:
         options = Options()
         options.add_argument('--headless')

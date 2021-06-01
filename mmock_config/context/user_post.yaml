@@ -1,0 +1,10 @@
+---
+request:
+  method: POST
+  path: "/user"
+response:
+  statusCode: 200
+  headers:
+    Content-Type:
+      - application/json
+  body: '{"User was added"}'
