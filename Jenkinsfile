@@ -22,7 +22,8 @@ pipeline {
             # Show all environment variables
             export
             # Install requirements
-            pip install -r requirements.txt
+            python3 --version
+            pip3 install -r requirements.txt
             # Run tests
             python3 -m pytest -n 3
             # EOF
